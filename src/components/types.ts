@@ -12,12 +12,6 @@ export interface CustomerData {
   birth_date: string;
   document_ssn: string;
 }
-
-export interface StateData {
-  name: string
-  abbreviation: string
-}
-
 export enum OutComes {
   APPROVED = "Approved",
   DENIED = "Denied",

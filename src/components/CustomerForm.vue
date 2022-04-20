@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
-import StatesList from "./StatesList.vue";
+import { ref } from "vue";
 import { CustomerData, OutComes, RouteNames } from "./types";
 import { serverRequest } from "../Utils/serverRequests";
 import states from "../static/states";
@@ -21,16 +20,9 @@ const customerInfo = ref({
   document_ssn: "",
 });
 
-const classesasdf = computed(() => {});
-
+// refs for zip code and ssn error messages
 const zipCodeValidation = ref(false);
 const ssnValidation = ref(false);
-const validationClasses = ref({
-  zipCode: false,
-  ssn: false,
-});
-
-const errorMessages = ref([] as string[]);
 
 function numberCheck(value: string) {
   if (Number(value)) {
@@ -40,6 +32,9 @@ function numberCheck(value: string) {
   }
 }
 
+// check to see if SSN and Zip are numbers
+// check to see if SSN is 9 digits and Zip is 5 digits
+// set ref to true so v-if will show error message
 function formValidation() {
   if (customerInfo.value.address_postal_code.length != 5) {
     zipCodeValidation.value = true;
@@ -63,25 +58,21 @@ async function submitForm() {
       customerInfo.value as CustomerData
     );
     if (serverResponse) {
-      console.log(serverResponse.request)
+      // turn request data into readable object
       const summaryData = JSON.parse(serverResponse.request.response);
-      console.log(summaryData.outcome)
 
+      // switch through outcome data to provide appropriate splash screen
       switch (summaryData.outcome) {
         case OutComes.APPROVED:
-          console.log("test")
           router.push({name: RouteNames.SuccessPage})
           break;
         case OutComes.DENIED:
-          console.log("denied")
           router.push({name: RouteNames.FailurePage})
           break;
         case OutComes.MANUAL_REVIEW:
-          console.log("pending review")
           router.push({name: RouteNames.PendingReviewPage})
           break;
       }
-      console.log(summaryData);
     }
   }
 }
@@ -119,7 +110,7 @@ async function submitForm() {
               placeholder="9 Digits"
               required
             />
-            <small v-if="validationClasses.ssn" class="validation-error"
+            <small v-if="ssnValidation" class="validation-error"
               >SSN should be 9 digits</small
             >
           </div>
@@ -192,7 +183,7 @@ async function submitForm() {
               placeholder="86753"
               required
             />
-            <small v-if="validationClasses.zipCode" class="validation-error"
+            <small v-if="zipCodeValidation" class="validation-error"
               >ZIP Code should be 5 digits</small
             >
           </div>
@@ -220,11 +211,11 @@ async function submitForm() {
   align-self: center;
   width: 30%;
   padding: 2em;
-  background: rgb(119, 171, 88);
+  background: aliceblue;
   background: linear-gradient(
     180deg,
-    rgba(119, 171, 88, 1) 0%,
-    rgba(167, 165, 165, 1) 96%
+    antiquewhite 20%,
+    rgba(120, 120, 216, 0.938)  96%
   );
   border-radius: 0.8em;
 }

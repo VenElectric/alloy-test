@@ -9,7 +9,7 @@
           Your rock solid customer report has approved you at the Sesame Credit
           Union for the Rocko Credit Line
         </p>
-        <p>You should expect 3-5 business days for the card to arrive</p>
+        <p>You can expect your Rocko Card to arrive within 3-5 business days</p>
         <p>
           If it doesn't arrive, please update your imagination so that the Rocko
           Credit Line comes into existence
