@@ -1,35 +1,32 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import StatesList from "./StatesList.vue";
+import { CustomerData } from "./types";
+import { serverRequest } from "../Utils/serverRequests";
+import states from "../static/states"
 
 const customerInfo = ref({
-  firstName: "",
-  lastName: "",
-  address1: "",
-  address2: "",
-  city: "",
-  stateCode: "",
-  zipCode: "",
-  countryAbbr: "",
-  ssn: "",
-  email: "",
-  birthDate: null,
+  name_first: "",
+  name_last: "",
+  phone_number: "",
+  email_address: "",
+  address_line_1: "",
+  address_line_2: "",
+  address_city: "",
+  address_state: "",
+  address_postal_code: "",
+  address_country_code: "",
+  birth_date: "",
+  document_ssn: "",
 });
 
 const classesasdf = computed(() => {});
 
+const zipCodeValidation = ref(false);
+const ssnValidation = ref(false);
 const validationClasses = ref({
-  firstName: false,
-  lastName: false,
-  address1: false,
-  address2: false,
-  city: false,
-  stateCode: false,
   zipCode: false,
-  countryAbbr: false,
   ssn: false,
-  email: false,
-  birthDate: false,
 });
 
 const errorMessages = ref([] as string[]);
@@ -42,23 +39,27 @@ function numberCheck(value: string) {
   }
 }
 
+function formValidation() {
+  if (customerInfo.value.address_postal_code.length != 5) {
+    zipCodeValidation.value = true;
+  }
+  if (!numberCheck(customerInfo.value.address_postal_code)) {
+    zipCodeValidation.value = true;
+  }
+  if (customerInfo.value.document_ssn.length != 9) {
+    ssnValidation.value = true;
+  }
+  if (!numberCheck(customerInfo.value.document_ssn)) {
+    ssnValidation.value = true;
+  }
+}
+
 function submitForm() {
-  errorMessages.value = [];
-  switch (true) {
-    case customerInfo.value.stateCode == null:
-      validationClasses.value.stateCode = true;
-      break;
-    case customerInfo.value.zipCode.length != 5:
-      validationClasses.value.zipCode = true;
-      break;
-    case numberCheck(customerInfo.value.zipCode):
-      validationClasses.value.zipCode = true;
-    case customerInfo.value.ssn.length != 9:
-      validationClasses.value.ssn = true;
-      break;
-    case numberCheck(customerInfo.value.ssn):
-      validationClasses.value.ssn = true;
-      break;
+  formValidation();
+  if (zipCodeValidation.value == true || ssnValidation.value == true) return;
+  if (customerInfo.value != null) {
+    const serverResponse = serverRequest(customerInfo.value as CustomerData);
+    console.log(serverResponse);
   }
 }
 </script>
@@ -67,29 +68,32 @@ function submitForm() {
     <div class="form-layout">
       <form @submit.prevent="submitForm">
         <h2>Verification Form</h2>
-        <div class="name-cage">
-          <h3>Step 1: Personal Identification</h3>
+        <h3>Step 1: Personal Identification</h3>
+        <div class="cage">
           <div class="field">
+            <small>First Name</small>
             <input
               type="text"
-              v-model="customerInfo.firstName"
-              placeholder="First Name"
+              v-model="customerInfo.name_first"
+              placeholder="John"
               required
             />
           </div>
           <div class="field">
+            <small>Last Name</small>
             <input
               type="text"
-              v-model="customerInfo.lastName"
-              placeholder="Last Name"
+              v-model="customerInfo.name_last"
+              placeholder="Doe"
               required
             />
           </div>
           <div class="field">
+            <small>SSN</small>
             <input
               type="text"
-              v-model="customerInfo.ssn"
-              placeholder="SSN"
+              v-model="customerInfo.document_ssn"
+              placeholder="9 Digits"
               required
             />
             <small v-if="validationClasses.ssn" class="validation-error"
@@ -97,46 +101,84 @@ function submitForm() {
             >
           </div>
           <div class="field">
-            <input type="date" v-model="customerInfo.birthDate" required />
+            <small>Date of Birth</small>
+            <input type="date" v-model="customerInfo.birth_date" required />
           </div>
           <div class="field">
+            <small>E-mail</small>
             <input
               type="email"
-              v-model="customerInfo.email"
-              placeholder="E-mail Address"
+              v-model="customerInfo.email_address"
+              placeholder="big_bird@sesame.com"
+              required
+            />
+          </div>
+          <div class="field">
+            <small>Phone Number</small>
+            <input
+              type="tel"
+              pattern="[0-9]{11,14}"
+              v-model="customerInfo.phone_number"
+              placeholder="14158675309"
               required
             />
           </div>
         </div>
+
+        <h3>Step 2: Address Information</h3>
         <div class="cage">
-          <h3>Step 2: Address Information</h3>
-          <input
-            type="text"
-            v-model="customerInfo.address1"
-            placeholder="123 Sesame Street"
-            required
-          />
-          <input
-            type="text"
-            v-model="customerInfo.address2"
-            placeholder="Apt G"
-          />
-          <input
-            type="text"
-            v-model="customerInfo.city"
-            placeholder="Muppetville"
-            required
-          />
-          <StatesList />
-          <input
-            type="text"
-            v-model="customerInfo.zipCode"
-            placeholder="86753"
-            required
-          />
-          <select>
-            <option value="US">United States</option>
-          </select>
+          <div class="field">
+            <small>Address Line 1</small>
+            <input
+              type="text"
+              v-model="customerInfo.address_line_1"
+              placeholder="123 Sesame Street"
+              required
+            />
+          </div>
+          <div class="field">
+            <small>Address Line 2</small>
+            <input
+              type="text"
+              v-model="customerInfo.address_line_2"
+              placeholder="Apt G"
+            />
+          </div>
+          <div class="field">
+            <small>City</small>
+            <input
+              type="text"
+              v-model="customerInfo.address_city"
+              placeholder="Muppetville"
+              required
+            />
+          </div>
+          <div class="field">
+            <small>State</small>
+            <select v-model="customerInfo.address_state">
+              <option v-for="state in states" :value="state.abbreviation">
+                {{ state.name }}
+              </option>
+            </select>
+          </div>
+          <div class="field">
+            <small>ZIP Code</small>
+            <input
+              type="text"
+              v-model="customerInfo.address_postal_code"
+              placeholder="86753"
+              required
+            />
+            <small v-if="validationClasses.zipCode" class="validation-error"
+              >ZIP Code should be 5 digits</small
+            >
+          </div>
+          <div class="field">
+            <small>Country</small>
+            <select v-model="customerInfo.address_country_code">
+              <option value="US">United States</option>
+            </select>
+          </div>
         </div>
         <button>Submit</button>
       </form>
@@ -155,19 +197,18 @@ function submitForm() {
   align-self: center;
   width: 30%;
   padding: 2em;
-  background: rgb(96, 96, 185);
-  background: radial-gradient(
-    circle,
-    rgba(96, 96, 185, 1) 0%,
-    rgba(131, 172, 214, 1) 71%,
-    rgba(132, 180, 230, 1) 100%
+  background: rgb(119, 171, 88);
+  background: linear-gradient(
+    180deg,
+    rgba(119, 171, 88, 1) 0%,
+    rgba(167, 165, 165, 1) 96%
   );
   border-radius: 0.8em;
 }
-.name-cage {
+.cage {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-evenly;
+  justify-content: space-around;
 }
 input {
   border-radius: 0.3em;
@@ -180,10 +221,13 @@ button {
   flex-direction: column;
   margin: 1em;
   padding: 0.1em;
+  width: 10em;
 }
 .validation-error {
   margin: 0;
-  color: red;
-  font-size: 0.6em;
+  margin-top: 0.5em;
+  color: rgb(255, 0, 0);
+  font-size: 0.7em;
+  font-weight: bold;
 }
 </style>
