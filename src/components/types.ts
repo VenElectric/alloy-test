@@ -21,5 +21,6 @@ export enum OutComes {
 export enum RouteNames {
   PendingReviewPage = "PendingReviewPage",
   FailurePage = "FailurePage",
-  SuccessPage = "SuccessPage"
+  SuccessPage = "SuccessPage",
+  ErrorPage = "ErrorPage",
 } 

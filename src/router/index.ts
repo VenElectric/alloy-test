@@ -3,6 +3,7 @@ import CustomerForm from "../components/CustomerForm.vue";
 import AutoSuccessPage from "../components/AutoSuccessPage.vue";
 import FailurePage from "../components/FailurePage.vue";
 import PendingReviewPage from "../components/PendingReviewPage.vue";
+import ErrorStatusPage from "../components/ErrorStatusPage.vue";
 
 
 const routes: Array<RouteRecordRaw> = [
@@ -25,6 +26,11 @@ const routes: Array<RouteRecordRaw> = [
     path: "/pending-review",
     name: "PendingReviewPage",
     component: PendingReviewPage,
+  },
+  {
+    path: "/error-page",
+    name: "ErrorPage",
+    component: ErrorStatusPage,
   },
 ];
 

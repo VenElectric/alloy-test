@@ -57,22 +57,26 @@ async function submitForm() {
     const serverResponse = await serverRequest(
       customerInfo.value as CustomerData
     );
-    if (serverResponse) {
-      // turn request data into readable object
-      const summaryData = JSON.parse(serverResponse.request.response);
+    try {
+      if (serverResponse) {
+        // turn request data into readable object
+        const summaryData = JSON.parse(serverResponse.request.response);
 
-      // switch through outcome data to provide appropriate splash screen
-      switch (summaryData.outcome) {
-        case OutComes.APPROVED:
-          router.push({name: RouteNames.SuccessPage})
-          break;
-        case OutComes.DENIED:
-          router.push({name: RouteNames.FailurePage})
-          break;
-        case OutComes.MANUAL_REVIEW:
-          router.push({name: RouteNames.PendingReviewPage})
-          break;
+        // switch through outcome data to provide appropriate splash screen
+        switch (summaryData.outcome) {
+          case OutComes.APPROVED:
+            router.push({ name: RouteNames.SuccessPage });
+            break;
+          case OutComes.DENIED:
+            router.push({ name: RouteNames.FailurePage });
+            break;
+          case OutComes.MANUAL_REVIEW:
+            router.push({ name: RouteNames.PendingReviewPage });
+            break;
+        }
       }
+    } catch (error) {
+      router.push({name:RouteNames.ErrorPage})
     }
   }
 }
@@ -215,7 +219,7 @@ async function submitForm() {
   background: linear-gradient(
     180deg,
     antiquewhite 20%,
-    rgba(120, 120, 216, 0.938)  96%
+    rgba(120, 120, 216, 0.938) 96%
   );
   border-radius: 0.8em;
 }
