@@ -1,7 +1,7 @@
 import axios from "axios";
 import { CustomerData } from "../components/types";
 
-const url = "https://alloy-test-server.herokuapp.com/";
+const url = "https://alloy-test-server.herokuapp.com/server-request";
 
 export async function serverRequest(customerData: CustomerData) {
   try {
