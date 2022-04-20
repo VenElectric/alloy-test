@@ -78,7 +78,7 @@ async function submitForm() {
         }
       }
     } catch (error) {
-      router.push({name:RouteNames.ErrorPage})
+      router.push({ name: RouteNames.ErrorPage });
     }
   }
 }
