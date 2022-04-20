@@ -1,21 +1,21 @@
-<script setup lang="ts">
-import CustomerForm from "./components/CustomerForm.vue";
-</script>
+<script setup lang="ts"></script>
 
 <template>
-  <CustomerForm></CustomerForm>
-  <small class="photo-cred"
-    >Photo by
-    <a
-      href="https://unsplash.com/@minkus?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText"
-      >Minku Kang</a
+  <div id="app">
+    <router-view />
+    <small class="photo-cred"
+      >Photo by
+      <a
+        href="https://unsplash.com/@minkus?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText"
+        >Minku Kang</a
+      >
+      on
+      <a
+        href="https://unsplash.com/t/interiors?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText"
+        >Unsplash</a
+      ></small
     >
-    on
-    <a
-      href="https://unsplash.com/t/interiors?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText"
-      >Unsplash</a
-    ></small
-  >
+  </div>
 </template>
 
 <style>
@@ -23,7 +23,7 @@ body {
   background-image: url("./assets/minku-kang-DH-mVew20lw-unsplash.jpg");
   background-repeat: no-repeat;
   background-position: center;
-  background-size:cover;
+  background-size: cover;
 }
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -32,7 +32,7 @@ body {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
-  
+  height: 90vh;
 }
 .photo-cred {
   margin-right: 0;

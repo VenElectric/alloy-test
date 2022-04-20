@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import StatesList from "./StatesList.vue";
-import { CustomerData } from "./types";
+import { CustomerData, OutComes, RouteNames } from "./types";
 import { serverRequest } from "../Utils/serverRequests";
-import states from "../static/states"
+import states from "../static/states";
+import router from "../router";
 
 const customerInfo = ref({
   name_first: "",
@@ -54,12 +55,34 @@ function formValidation() {
   }
 }
 
-function submitForm() {
+async function submitForm() {
   formValidation();
   if (zipCodeValidation.value == true || ssnValidation.value == true) return;
   if (customerInfo.value != null) {
-    const serverResponse = serverRequest(customerInfo.value as CustomerData);
-    console.log(serverResponse);
+    const serverResponse = await serverRequest(
+      customerInfo.value as CustomerData
+    );
+    if (serverResponse) {
+      console.log(serverResponse.request)
+      const summaryData = JSON.parse(serverResponse.request.response);
+      console.log(summaryData.outcome)
+
+      switch (summaryData.outcome) {
+        case OutComes.APPROVED:
+          console.log("test")
+          router.push({name: RouteNames.SuccessPage})
+          break;
+        case OutComes.DENIED:
+          console.log("denied")
+          router.push({name: RouteNames.FailurePage})
+          break;
+        case OutComes.MANUAL_REVIEW:
+          console.log("pending review")
+          router.push({name: RouteNames.PendingReviewPage})
+          break;
+      }
+      console.log(summaryData);
+    }
   }
 }
 </script>

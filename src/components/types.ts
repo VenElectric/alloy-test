@@ -17,3 +17,15 @@ export interface StateData {
   name: string
   abbreviation: string
 }
+
+export enum OutComes {
+  APPROVED = "Approved",
+  DENIED = "Denied",
+  MANUAL_REVIEW = "Manual Review"
+}
+
+export enum RouteNames {
+  PendingReviewPage = "PendingReviewPage",
+  FailurePage = "FailurePage",
+  SuccessPage = "SuccessPage"
+} 
