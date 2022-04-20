@@ -4,6 +4,7 @@ import { CustomerData } from "../components/types";
 const url = "https://alloy-test-server.herokuapp.com/server-request";
 
 export async function serverRequest(customerData: CustomerData) {
+  console.log(url)
   try {
     let responseData = await axios({
       url,

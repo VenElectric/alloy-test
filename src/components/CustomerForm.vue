@@ -36,6 +36,8 @@ function numberCheck(value: string) {
 // check to see if SSN is 9 digits and Zip is 5 digits
 // set ref to true so v-if will show error message
 function formValidation() {
+  zipCodeValidation.value = false;
+  ssnValidation.value = false;
   if (customerInfo.value.address_postal_code.length != 5) {
     zipCodeValidation.value = true;
   }
