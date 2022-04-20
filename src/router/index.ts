@@ -4,7 +4,7 @@ import AutoSuccessPage from "../components/AutoSuccessPage.vue";
 import FailurePage from "../components/FailurePage.vue";
 import PendingReviewPage from "../components/PendingReviewPage.vue";
 import ErrorStatusPage from "../components/ErrorStatusPage.vue";
-
+import {RouteNames} from "../components/types";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -38,6 +38,16 @@ const router = createRouter({
   // 4. Provide the history implementation to use. We are using the hash history for simplicity here.
   history: createWebHistory(),
   routes, // short for `routes: routes`
-})
+});
+
+router.beforeEach((to, from) => {
+  console.log(to)
+  console.log(from)
+  console.log(from.name == undefined)
+  if(from.name == undefined && to.name != "CustomerForm"){
+   return {name: "CustomerForm"}
+  }
+ 
+});
 
 export default router;

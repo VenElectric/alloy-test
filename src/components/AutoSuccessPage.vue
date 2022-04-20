@@ -1,4 +1,6 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import ReturnHome from './ReturnHome.vue';
+</script>
 
 <template>
   <div class="container">
@@ -15,6 +17,7 @@
           Credit Line comes into existence
         </p>
       </div>
+      <ReturnHome></ReturnHome>
     </div>
   </div>
 </template>
@@ -37,6 +40,7 @@
   align-self: center;
   border-radius: 2em;
   margin-bottom: 2em;
+   box-shadow: 10px 5px 5px aqua;
 }
 .text-border {
   border: solid black 0.5em;

@@ -23,4 +23,5 @@ export enum RouteNames {
   FailurePage = "FailurePage",
   SuccessPage = "SuccessPage",
   ErrorPage = "ErrorPage",
+  CustomerForm = "CustomerForm",
 } 
