@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, computed } from "vue";
+import StatesList from "./StatesList.vue";
 
 const customerInfo = ref({
   firstName: "",
@@ -10,23 +11,54 @@ const customerInfo = ref({
   stateCode: "",
   zipCode: "",
   countryAbbr: "",
-  ssn: 0,
+  ssn: "",
   email: "",
-  date: null,
+  birthDate: null,
 });
 
-function ssnValidate(ssn: Number) {
-  const ssnStr = ssn.toString();
-  return ssnStr.length == 9;
-}
+const classesasdf = computed(() => {});
 
-function stateValidate(state: String) {
-  return state.length == 2;
+const validationClasses = ref({
+  firstName: false,
+  lastName: false,
+  address1: false,
+  address2: false,
+  city: false,
+  stateCode: false,
+  zipCode: false,
+  countryAbbr: false,
+  ssn: false,
+  email: false,
+  birthDate: false,
+});
+
+const errorMessages = ref([] as string[]);
+
+function numberCheck(value: string) {
+  if (Number(value)) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 function submitForm() {
-  switch (true){
-
+  errorMessages.value = [];
+  switch (true) {
+    case customerInfo.value.stateCode == null:
+      validationClasses.value.stateCode = true;
+      break;
+    case customerInfo.value.zipCode.length != 5:
+      validationClasses.value.zipCode = true;
+      break;
+    case numberCheck(customerInfo.value.zipCode):
+      validationClasses.value.zipCode = true;
+    case customerInfo.value.ssn.length != 9:
+      validationClasses.value.ssn = true;
+      break;
+    case numberCheck(customerInfo.value.ssn):
+      validationClasses.value.ssn = true;
+      break;
   }
 }
 </script>
@@ -37,20 +69,74 @@ function submitForm() {
         <h2>Verification Form</h2>
         <div class="name-cage">
           <h3>Step 1: Personal Identification</h3>
-          <input type="text" v-model="customerInfo.firstName" placeholder="First Name" required/>
-          <input type="text" v-model="customerInfo.lastName" placeholder="Last Name" required/>
-          <input type="text" v-model="customerInfo.ssn" placeholder="SSN" required/>
-          <input type="date" v-model="customerInfo.date" required/>
-          <input type="email" v-model="customerInfo.email" placeholder="E-mail Address" required/>
+          <div class="field">
+            <input
+              type="text"
+              v-model="customerInfo.firstName"
+              placeholder="First Name"
+              required
+            />
+          </div>
+          <div class="field">
+            <input
+              type="text"
+              v-model="customerInfo.lastName"
+              placeholder="Last Name"
+              required
+            />
+          </div>
+          <div class="field">
+            <input
+              type="text"
+              v-model="customerInfo.ssn"
+              placeholder="SSN"
+              required
+            />
+            <small v-if="validationClasses.ssn" class="validation-error"
+              >SSN should be 9 digits</small
+            >
+          </div>
+          <div class="field">
+            <input type="date" v-model="customerInfo.birthDate" required />
+          </div>
+          <div class="field">
+            <input
+              type="email"
+              v-model="customerInfo.email"
+              placeholder="E-mail Address"
+              required
+            />
+          </div>
         </div>
         <div class="cage">
           <h3>Step 2: Address Information</h3>
-          <input type="text" v-model="customerInfo.address1" placeholder="123 Sesame Street" required/>
-          <input type="text" v-model="customerInfo.address2" placeholder="Apt G" />
-          <input type="text" v-model="customerInfo.city" placeholder="Muppetville" required/>
-          <input type="text" v-model="customerInfo.stateCode" placeholder="CA" required/>
-          <input type="text" v-model="customerInfo.zipCode" placeholder="86753" required/>
-          <input type="text" v-model="customerInfo.countryAbbr" placeholder="Country" required/>
+          <input
+            type="text"
+            v-model="customerInfo.address1"
+            placeholder="123 Sesame Street"
+            required
+          />
+          <input
+            type="text"
+            v-model="customerInfo.address2"
+            placeholder="Apt G"
+          />
+          <input
+            type="text"
+            v-model="customerInfo.city"
+            placeholder="Muppetville"
+            required
+          />
+          <StatesList />
+          <input
+            type="text"
+            v-model="customerInfo.zipCode"
+            placeholder="86753"
+            required
+          />
+          <select>
+            <option value="US">United States</option>
+          </select>
         </div>
         <button>Submit</button>
       </form>
@@ -84,11 +170,20 @@ function submitForm() {
   justify-content: space-evenly;
 }
 input {
-  margin: 1em;
-  padding: 0.1em;
   border-radius: 0.3em;
 }
 button {
   margin-top: 2em;
+}
+.field {
+  display: flex;
+  flex-direction: column;
+  margin: 1em;
+  padding: 0.1em;
+}
+.validation-error {
+  margin: 0;
+  color: red;
+  font-size: 0.6em;
 }
 </style>
